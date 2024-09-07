@@ -16,32 +16,93 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='BusinessAccount',
+            name="BusinessAccount",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('business_name', models.CharField(max_length=100)),
-                ('business_address', models.CharField(max_length=100)),
-                ('business_phone', models.CharField(max_length=100)),
-                ('business_email', models.EmailField(max_length=254)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("business_name", models.CharField(max_length=100)),
+                ("business_address", models.CharField(max_length=100)),
+                ("business_phone", models.CharField(max_length=100)),
+                ("business_email", models.EmailField(max_length=254)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TeamManager',
+            name="TeamManager",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('team_name', models.CharField(max_length=100)),
-                ('team_id', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.businessaccount')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("team_name", models.CharField(max_length=100)),
+                (
+                    "team_id",
+                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.businessaccount",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TeamMember',
+            name="TeamMember",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('team_role', models.CharField(choices=[('admin', 'admin'), ('member', 'member'), ('guest', 'guest')], max_length=100)),
-                ('team', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.teammanager')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "team_role",
+                    models.CharField(
+                        choices=[
+                            ("admin", "admin"),
+                            ("member", "member"),
+                            ("guest", "guest"),
+                        ],
+                        max_length=100,
+                    ),
+                ),
+                (
+                    "team",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.teammanager",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

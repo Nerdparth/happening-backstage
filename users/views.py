@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 import requests
 
@@ -36,7 +37,7 @@ def login_user(request):
             return HttpResponseRedirect('/dashboard')
         else:
             messages.error(request, 'Invalid credentials')
-            return HttpResponseRedirect('/login')
+            return HttpResponseRedirect('users/login')
     return render(request, 'users/login.html')
 
 def setup_business_account(request):
@@ -57,7 +58,7 @@ def setup_business_account(request):
         #     messages.success(request, 'Email Sent')   
 
         messages.success(request, 'Account setup successful')
-        return HttpResponseRedirect('/dashboard')
+        return HttpResponseRedirect('users/team-setup')
     return render(request, 'users/account_setup_page.html')
 
 
@@ -91,3 +92,32 @@ def team_manager(request):
         messages.success(request, 'Team created successfully')
         return HttpResponseRedirect('/dashboard')
     return render(request, 'users/team_manager.html')
+
+
+def add_to_team_page(request):
+    try:
+        b_account = BusinessAccount.objects.get(user=request.user)
+        try:
+            team = TeamManager.objects.get(user=b_account)
+            return render(request, 'users/add_to_team_page.html', {'team':team})
+        except:
+            messages.error(request, 'No team found')
+            return HttpResponseRedirect('/team-setup')
+    except:
+        messages.error(request, 'No business account found')
+        return HttpResponseRedirect('users/setup-business-account/')
+
+
+
+
+#jquery for this to add to team
+@csrf_exempt
+def add_to_team(request):
+    if request.method == "POST":
+        team_id = request.POST.get('team_id')
+        team = TeamManager.objects.get(team_id=team_id)
+        team_member = TeamMember(user=request.user, team=team, team_role="member")
+        team_member.save()
+        messages.success(request, 'Added to team successfully')
+        return JsonResponse({'status':200, 'message':'Added to team successfully'})
+    return render(request, 'users/add_to_team_page.html')
