@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - SkillSprints V2</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<style>
+    /* Reset basic styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Container for the background image and the event content */
+.event-container {
+    height: 100vh; /* Full screen height */
+    
+    background-size: cover;
+    
+    background-position: center; /* Center the image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.content-overlay {
+    background: rgba(255, 255, 255, 0.2); /* Light translucent background for glassmorphism */
+    backdrop-filter: blur(10px); /* Blur effect for glassmorphism */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Glassmorphism border */
+    padding: 20px;
+    text-align: center;
+    color: white;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 15px;
+}
+
+.register-button {
+    background-color: #00b4d8;
+    border: none;
+    padding: 15px 30px;
+    color: white;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.register-button:hover {
+    background-color: #0096c7;
+}
+
+.event-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0 0 20px;
+}
+
+.button-container {
+    margin: 20px 0;
+}
+
+.cta-button {
+    background-color: #0077b6;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 25px;
+    margin: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cta-button i {
+    margin-left: 10px;
+}
+
+.cta-button:hover {
+    background-color: #0096c7;
+}
+
+.event-description {
+    background-color: rgba(255, 255, 255, 0.2); /* Glassmorphism translucent effect */
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.event-description h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.event-description p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.attend-button {
+    background-color: #00b4d8;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.attend-button:hover {
+    background-color: #0096c7;
+}
+
+/* Overlapping black section below */
+.black-section {
+    background-color: #000; /* Black background */
+    padding: 50px 20px; /* Padding for content inside the section */
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -50px; /* Pulls the black section upwards to overlap */
+    min-height: 50vh;
+    border-radius: 30px 30px 0 0; /* Rounded top corners */
+    z-index: 2;
+}
+
+.extra-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.extra-content h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.extra-content p {
+    font-size: 16px;
+}
+
+.image-brightness{
+    background-image: url('/media/pexels-wolfgang-1002140-2747449\ 1.png'); /* Your image */
+}
+
+@media (max-width: 768px) {
+    .event-container {
+        height: 90vh;
+    }
+
+    .content-overlay {
+        width: 90%;
+    }
+}
+
+</style>
+<body>
+    <div class="image-brightness">
+    <div class="event-container">
+        <div class="content-overlay">
+            <button class="register-button" onclick="location.href='YOUR_FORM_URL_HERE'">Register Now</button>
+            <h1 class="event-title">{{  }}</h1>
+            <div class="button-container">
+                <a href="{% %}" class="cta-button">visit website <i class="fas fa-arrow-right"></i></a>
+                <a href="YOUR_INSTAGRAM_URL_HERE" class="cta-button">visit instagram <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="event-description">
+                <h2>Spark by Statusbrew</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum faucibus felis, in viverra commodo.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae placerat vitae Sed nec quis nisl.</p>
+                <button class="attend-button">Attend</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlapping black section below the image -->
+    <div class="black-section">
+        <div class="extra-content">
+            <h2>Additional Information</h2>
+            <p>Here you can place more details about the event or footer content.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
