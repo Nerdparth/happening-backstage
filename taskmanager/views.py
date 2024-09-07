@@ -3,6 +3,24 @@ from django.http import HttpResponseRedirect,JsonResponse
 from users.models import BusinessAccount, TeamManager, TeamMember
 from .models import Task, TodoList, TodoItem
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+
+def taskmanager_home(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    tasks = Task.objects.filter(team=team).exclude(status="done").order_by('end_date')
+
+    priority_tasks = Task.objects.filter(team=team,priority="high").count()
+    priority_tasks_complete = Task.objects.filter(team=team,priority="high",status="done").count()
+
+    pending_tasks = Task.objects.filter(team=team).exclude(status="done").count()
+    overdue_tasks = Task.objects.filter(team=team, end_date__lt=timezone.now()).exclude(status="done").count()
+
+    return render(request, 'taskmanager/taskmanager.html',context={'account':account,'team':team,"tasks":tasks,"priority_tasks":priority_tasks,"priority_tasks_complete":priority_tasks_complete,"pending_tasks":pending_tasks,"overdue_tasks":overdue_tasks})
+
+
+
+
 
 def create_task(request):
     if request.method == 'POST':
@@ -22,7 +40,10 @@ def view_task(request, task_id):
     task = Task.objects.get(id=task_id)
     todo_lists = TodoList.objects.filter(task=task)
     account = BusinessAccount.objects.get(user=request.user)
-    return render(request, 'taskmanager/task.html', {'task':task,"todos":todo_lists, "account":account,"team":task.team})  
+    team = TeamManager.objects.get(user=account)
+    tasks = Task.objects.filter(team=team).exclude(status="done").order_by('end_date')
+
+    return render(request, 'taskmanager/task.html', {'task':task,"todos":todo_lists, "account":account,"team":task.team,"tasks":tasks})  
 
 def update_task(request, task_id):
     if request.method == 'POST':
@@ -62,7 +83,7 @@ def get_team_tasks(request):
     tasks = Task.objects.filter(team=team_manager)
     return_list = []
     for task in tasks:
-        return_list.append({'title':task.title, 'description':task.description, 'status':task.status, 'completed':task.completed,"priority":task.priority,"end_date":task.end_date.strftime("%B %d ")  , 'id':task.id,'assigned_to':[{"email":person.email,"name":person.user} for person in task.assigned_to.all()]})
+        return_list.append({'title':task.title, 'description':task.description, 'status':task.status, 'completed':task.completed,"priority":task.priority,"end_date":task.end_date.strftime("%b %d ")  , 'id':task.id,'assigned_to':[{"email":person.email,"name":person.user} for person in task.assigned_to.all()]})
     return JsonResponse(return_list, safe=False)
 
 @csrf_exempt
@@ -106,3 +127,23 @@ def complete_todo_item(request, item_id):
     todo_item.completed = False if todo_item.completed == True else True
     todo_item.save()
     return render(request, 'taskmanager/todo_list.html', {'todo':todo_list})
+
+
+
+def assign_task_to_teammate(request):
+    if request.method == 'POST':
+        task_id = request.POST.get('task_id')
+        task = Task.objects.get(id=task_id)
+        person = TeamMember.objects.get(id=request.POST.get('person_id'))
+        task.assigned_to.add(person)
+        task.save()
+        return render(request, 'taskmanager/assign_tasks.html', {'task':task})
+    
+@csrf_exempt
+def remove_task_from_teammate(request,task_id,person_id):
+    if request.method == 'POST':
+        task = Task.objects.get(id=task_id)
+        person = TeamMember.objects.get(id=person_id)
+        task.assigned_to.remove(person)
+        task.save()
+        return render(request, 'taskmanager/assign_tasks.html', {'task':task})

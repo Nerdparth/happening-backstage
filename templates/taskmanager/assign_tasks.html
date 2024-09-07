@@ -1,0 +1,20 @@
+<style>
+    .person:hover {
+        cursor: pointer;
+        background-color: #ff8977;
+        color: rgb(103, 0, 0);
+        padding-left: 20px;
+        padding-right: 20px;
+        transition: 0.2s linear;
+    }
+</style>
+<td>Assigned to</td>
+<td>
+    {% for person in task.assigned_to.all %}
+    <li class="person" hx-post="{% url 'unassign_task' task.id person.id %}" hx-trigger="click"
+                      hx-target="#assign-task" hx-swap="innerHTML" data-bs-toggle="tooltip" data-bs-placement="bottom"
+        data-bs-title="Click to remove">{{person.user}}</li>
+    {% endfor %}
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignMember"
+        style="border-radius:20px;">Add Person</button>
+</td>

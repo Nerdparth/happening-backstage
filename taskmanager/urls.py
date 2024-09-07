@@ -3,6 +3,7 @@ from . import views
 
 
 urlpatterns = [
+    path("",views.taskmanager_home, name="task-manager"),
     path('task/create/', views.create_task, name='create_task'),
     path('task/<int:task_id>/', views.view_task, name='view_task'),
     path('task/<int:task_id>/update/', views.update_task, name='update_task'),
@@ -12,5 +13,7 @@ urlpatterns = [
     path("todo-list/create/", views.create_todo_list, name="create_todo_list"),
     path("todo-list/add-item/", views.create_todo_item, name="add_todo_item"),
     path("todo-list/complete-item/<int:item_id>", views.complete_todo_item, name="complete_todo_item"),
+    path("task/assign-task/", views.assign_task_to_teammate, name="assign_task"),
+    path("task/unassign-task/<str:task_id>/<int:person_id>/", views.remove_task_from_teammate, name="unassign_task"),
 
 ]

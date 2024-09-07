@@ -47,6 +47,7 @@
     }
     a{
         text-decoration: none;
+        color: inherit;
     }
    
 </style>
@@ -60,8 +61,8 @@
         <ul>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-table"></i> <span class="mx-3" style="width:150px;">Home</span> <i class="fa-solid fa-chevron-right"></i></li>
             <li class="dashboard-tile border-bottom"><i class="fa-regular fa-calendar"></i> <span class="mx-3" style="width:150px;">Events</span> <i class="fa-solid fa-chevron-right"></i></li>
-            <li class="dashboard-tile border-bottom"><i class="fa-solid fa-list-check"></i> <span class="mx-3"
-                    style="width:150px;">Task Manager</span> <i class="fa-solid fa-chevron-right"></i></li>
+            <a href="{% url 'task-manager' %}"><li class="dashboard-tile border-bottom"><i class="fa-solid fa-list-check"></i> <span class="mx-3"
+                    style="width:150px;">Task Manager</span> <i class="fa-solid fa-chevron-right"></i></li></a>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-calendar-days"></i> <span class="mx-3"
                     style="width:150px;">Calendar</span> <i class="fa-solid fa-chevron-right"></i></li>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-users-line"></i> <span class="mx-3"

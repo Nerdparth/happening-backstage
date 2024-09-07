@@ -43,12 +43,48 @@
                                 {% include 'taskmanager/task_status.html' %}
                             </td>
                         </tr>
-                </table>
-               <ul>
-                {% for person in task.assigned_to.all %}
-                    <li class="person">{{person.user}}</li>
-                {% endfor %}
-               </ul>
+                
+               <tr id="assign-task"> 
+                    {% include 'taskmanager/assign_tasks.html' %}
+               </tr>
+            </table>
+
+            <!-- modal for team assiging -->
+
+            <div class="modal fade" id="assignMember" tabindex="-1" aria-labelledby="assignMember" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Select A Person</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="">
+                                {% csrf_token %}
+                                <!-- <input type="hidden" name="team" value="{{team.team_id}}"> -->
+                                <input type="hidden" name="task_id" value="{{task.id}}">
+            
+                                <div class="form-group">
+                                    <label for="person">People available in {{team}}</label>
+                                    <select type="text" name="person_id" id="person" class="form-select">
+                                        {% for person in team.members %}
+                                            <option value="{{person.id}}">{{person.user}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                               
+                                <div class="form-group mt-2">
+                                    <button class="btn btn-primary" hx-post="{% url 'assign_task' %}" hx-trigger="click"
+                                        hx-target="#assign-task" hx-swap="innerHTML" data-bs-dismiss="modal">
+                                        Assign task</button>
+                                </div>
+                            </form>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+
                 <div id="todo-list-parent">
                     {% include 'taskmanager/todo_list_parent.html' %}
                 </div>
