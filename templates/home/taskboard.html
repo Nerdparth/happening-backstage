@@ -1,0 +1,94 @@
+<style>
+    .add-button{
+        background-color: #fafafa;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #1c1c1e;
+    }
+    .add-button:hover{
+        background-color: #eeeeee;
+    }
+    .task{
+        background-color: #fafafa;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        padding: 5px;
+        cursor: pointer;
+        color: #1c1c1e;
+        margin-top: 10px;
+    }
+    .task-description{
+        font-size: 12px;
+        color: #6c6c6c;
+        height: 40px;
+        overflow: hidden;
+        white-space: nowrap; /* Don't forget this one */
+        text-overflow: ellipsis;
+    }
+    .priority{
+        height: 20px;
+        width: 60px;
+        border-radius: 12px;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        background-color: #f2f2f7;
+    }
+    .priority-medium{
+        color: #533d00;
+        background-color: #E7AA00;
+    }
+</style>
+
+<div class="container p-0 pb-2 mx-3" style="background-color: #f2f2f7;">
+    <div class="bg-white d-flex align-items-center" style="width: 100%;">
+        <div class="px-3 py-2">Tasks</div>
+        <div class="px-3 py-2">Timeline</div>
+        <div class="px-3 py-2">Progress Tracking</div>
+    </div>
+    <div class="m-3">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>TODO</h5>
+                <div class="add-button">Add <i class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+                <div class="tasks d-flex flex-column">
+                    <div class="task py-2">
+                        <div class="priority priority-medium">Medium</div>
+                        <div class="task-title">Task 1</div>
+                        <div class="task-description">Adding new features to event pages.Task is of medium priority.Adding new features to event pages.Task is of medium
+                        priority.
+                        Adding new features to event pages.Task is of medium priority.</div>
+                        <div><span class="pill rounded bg-primary p-2 text-white">View task</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5>INPROGRESS</h5>
+                <div class="add-button">Add <i class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+            </div>
+            <div class="col-md-3">
+                <h5>NEED REVIEW</h5>
+                <div class="add-button">Add <i class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+            </div>
+            <div class="col-md-3">
+                <h5>COMPLETED</h5>
+                <div class="add-button">Add <i class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+            </div>
+        </div>
+    </div>
+</div>

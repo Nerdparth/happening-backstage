@@ -1,0 +1,30 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="row" style="background-color: #f1f1f1;">
+    <div class="col-md-2">
+            {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10">
+    {% include 'home/top-bar.html' %}
+    <div class="row px-3">
+        <div class="col-md-8">
+            {% include 'home/tasks_overview.html' %}
+            {% include 'home/taskboard.html' %}
+
+        </div>
+        <div class="col-md-4"></div>
+
+    </div>
+
+
+    </div>
+</div>
+{% else %}
+<div class="container text-center py-4">
+    <h4>Please login to access the page</h4>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
+{% endif %}
+{% endblock content %}

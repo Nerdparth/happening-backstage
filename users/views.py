@@ -30,14 +30,15 @@ def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
+        username = User.objects.get(email=email).username
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful')
             return HttpResponseRedirect('/dashboard')
         else:
             messages.error(request, 'Invalid credentials')
-            return HttpResponseRedirect('users/login')
+            return HttpResponseRedirect('/users/login')
     return render(request, 'users/login.html')
 
 def setup_business_account(request):
@@ -64,9 +65,11 @@ def setup_business_account(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, 'Logout successful')
-    return HttpResponseRedirect('/login')
+    messages.error(request, 'Logout successful')
+    return HttpResponseRedirect('/users/login')
 
+
+@login_required
 def dashboard(request):
     return render(request, 'home/dashboard.html')
 
