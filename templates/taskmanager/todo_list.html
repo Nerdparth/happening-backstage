@@ -1,0 +1,24 @@
+<div id="todo-list{{todo.id}}">
+<h3 class="my-2">{{todo.title}}</h3>
+<ul style="list-style:decimal;">
+    {% for item in todo.todo_items.all %}
+    <details class="bg-light px-2 rounded my-1" >
+        {% if item.completed %}
+        <summary style="text-decoration: line-through;"><input type="radio" 
+                                            hx-post="{% url 'complete_todo_item' item.id %}"
+                                            hx-trigger="click"
+                                            hx-target="#todo-list{{todo.id}}"
+                                            hx-swap="innerHTML"  checked> {{item.title}}</summary>
+        {% else %}
+        <summary><input type="radio"  hx-post="{% url 'complete_todo_item' item.id %}"
+                                            hx-trigger="click"
+                                            hx-target="#todo-list{{todo.id}}"
+                                            hx-swap="innerHTML"> {{item.title}}
+        </summary>
+        {% endif %}
+        <p>{{item.description}}</p>
+
+    </details>
+    {% endfor %}
+</ul>
+</div>

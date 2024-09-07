@@ -1,0 +1,113 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<style>
+    .person{
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 15px;
+        background-color: #51a8ff;
+        font-size: 14px;
+    }
+</style>
+{% if request.user.is_authenticated %}
+<div class="row" style="background-color: #f1f1f1; height:100vh">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10">
+        {% include 'home/top-bar.html' %}
+        <div class="row px-3">
+            <div class="col-md-8">
+                <br>
+                <h1>{{task.title}}</h1>
+                <p>{{task.description}}</p>
+
+                <table class="table">
+                        <tr>
+                            <td>Start Date</td>
+                            <td>{{task.start_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>End Date</td>
+                            <td>{{task.end_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Priority</td>
+                            <td>{{task.priority}}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td id="task-status">
+                                {% include 'taskmanager/task_status.html' %}
+                            </td>
+                        </tr>
+                </table>
+               <ul>
+                {% for person in task.assigned_to.all %}
+                    <li class="person">{{person.user}}</li>
+                {% endfor %}
+               </ul>
+                <div id="todo-list-parent">
+                    {% include 'taskmanager/todo_list_parent.html' %}
+                </div>
+
+
+            <button type="button" class="btn btn-outline-dark mt-2" data-bs-toggle="modal" data-bs-target="#addTodoList">
+                New List <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </button>
+
+            <div class="modal fade" id="addTodoList" tabindex="-1" aria-labelledby="addTodoList"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Create a new Todo List</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="team" value="{{team.team_id}}">
+                                <input type="hidden" name="task" value="{{task.id}}">
+
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" name="title" id="title" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" hx-post="{% url 'create_todo_list' %}" hx-trigger="click"
+                                        hx-target="#todo-list-parent" hx-swap="innerHTML" data-bs-dismiss="modal">
+                                        Submit</button>
+                                </div>
+                            </form>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+            <!-- Button trigger modal -->
+            
+            
+            <!-- Modal -->
+           
+            </div>
+            <div class="col-md-4">
+                <br><br>
+                {% include 'components/deadlines.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center py-4">
+    <h4>Please login to access the page</h4>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
+{% endif %}
+{% endblock content %}

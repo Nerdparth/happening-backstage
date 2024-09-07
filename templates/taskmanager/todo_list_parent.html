@@ -1,0 +1,38 @@
+{% for todo in todos %}
+{% include 'taskmanager/todo_list.html' %}
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal{{todo.id}}"
+    todo-list="{{todo.id}}">
+    Add New Todo
+</button>
+<div class="modal fade" id="exampleModal{{todo.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add todo for {{todo.title}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="todo_list" value="{{todo.id}}">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" hx-post="{% url 'add_todo_item' %}" hx-trigger="click"
+                            hx-target="#todo-list{{todo.id}}" hx-swap="innerHTML" data-bs-dismiss="modal">
+                            Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}

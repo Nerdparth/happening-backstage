@@ -30,9 +30,10 @@ class TeamManager(models.Model):
 
 
 class TeamMember(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField(blank=False,default="abc@gmail.com")
+    user = models.CharField(max_length=100)
     team = models.ForeignKey("TeamManager", on_delete=models.CASCADE)
     team_role = models.CharField(max_length=100, choices=team_roles)
 
     def __str__(self):
-        return self.user.username
+        return self.email

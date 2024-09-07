@@ -1,0 +1,8 @@
+<select name="status" id=""  hx-post="{% url 'change_task_status' task.id %}" hx-trigger="change"
+    hx-target="#task-status" hx-swap="innerHTML">
+    <option value="todo" {% if task.status == "todo" %} selected {% endif %}>Todo</option>
+    <option value="progress" {% if task.status == "progress" %} selected {% endif %}>In Progress</option>
+    <option value="review" {% if task.status == "review" %} selected {% endif %}>Review</option>
+
+    <option value="done" {% if task.status == "done" %} selected {% endif %}>Done</option>
+</select>

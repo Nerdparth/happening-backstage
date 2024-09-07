@@ -59,7 +59,7 @@ def setup_business_account(request):
         #     messages.success(request, 'Email Sent')   
 
         messages.success(request, 'Account setup successful')
-        return HttpResponseRedirect('users/team-setup')
+        return HttpResponseRedirect('/users/team-setup')
     return render(request, 'users/account_setup_page.html')
 
 
@@ -88,12 +88,15 @@ def post_to_external_api(email,template,subject,url,name,company_name,msg):
     return response.status_code
     
 def team_manager(request):
+    #creates a team in db
     if request.method == "POST":
+        b_account = BusinessAccount.objects.get(user=request.user)
+
         team_name = request.POST.get('team_name')
-        team_manager = TeamManager(user=request.user, team_name=team_name)
-        team_manager.save()
+        team_manager = TeamManager.objects.get_or_create(user=b_account, team_name=team_name)
+
         messages.success(request, 'Team created successfully')
-        return HttpResponseRedirect('/dashboard')
+        return HttpResponseRedirect('/users/add-members-page')
     return render(request, 'users/team_manager.html')
 
 
@@ -102,10 +105,11 @@ def add_to_team_page(request):
         b_account = BusinessAccount.objects.get(user=request.user)
         try:
             team = TeamManager.objects.get(user=b_account)
-            return render(request, 'users/add_to_team_page.html', {'team':team})
-        except:
+            return render(request, 'users/team-setup.html', {'team':team})
+        except Exception as e:
+            print(e)
             messages.error(request, 'No team found')
-            return HttpResponseRedirect('/team-setup')
+            return HttpResponseRedirect('/users/team-setup')
     except:
         messages.error(request, 'No business account found')
         return HttpResponseRedirect('users/setup-business-account/')
@@ -119,8 +123,13 @@ def add_to_team(request):
     if request.method == "POST":
         team_id = request.POST.get('team_id')
         team = TeamManager.objects.get(team_id=team_id)
-        team_member = TeamMember(user=request.user, team=team, team_role="member")
+        name = request.POST.get('name')
+        role = request.POST.get('role')
+        email = request.POST.get('email')
+        team_member = TeamMember.objects.create(user=name,email=email, team=team, team_role=role)
         team_member.save()
+        # if post_to_external_api(email=user.email,template="welcome",subject="Account setup successful",url="https://example.com",name=request.user.username,company_name=business_name,msg="Your account has been successfully setup") == 200:
+        #     messages.success(request, 'Email Sent')  
         messages.success(request, 'Added to team successfully')
         return JsonResponse({'status':200, 'message':'Added to team successfully'})
     return render(request, 'users/add_to_team_page.html')

@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Setup</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-
-<body>
+{% extends 'home/base.html' %}
+{% block content %}
     <style>
         .login-btn {
             width: 300px;
@@ -117,32 +107,17 @@
             <div class="text-container text-dark">
                 <h1>Team Setup</h1>
             </div>
-
             <div class="form-container">
-                <form id="team-form">
+                <form action="" method="POST">
                     {% csrf_token %}
                     <label for="business_name">Team Name</label>
                     <div class="form-group mt-2 mb-2">
-                        <input type="text" id="business_name" name="business_name" class="input-control">
+                        <input type="text" id="business_name" name="team_name" class="input-control">
                     </div>
-
-                    <label>Team Members</label>
-                    <div class="form-inline mt-2 mb-2">
-                        <input type="text" id="member_name" name="member_name" class="input-control" placeholder="Name">
-                        <input type="email" id="member_email" name="member_email" class="input-control" placeholder="Email">
-                        <input type="text" id="member_role" name="member_role" class="input-control" placeholder="Role">
-                        <button type="button" id="add-member-btn" class="btn btn-secondary add-member-btn">Add</button>
-                    </div>
-
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary login-btn mt-3">Finish</button>
+                        <button type="submit" class="btn btn-primary login-btn mt-3">Next </button>
                     </div>
                 </form>
-            </div>
-
-            <div class="mt-4">
-                <h4 class="text-dark">Team Members:</h4>
-                <ul id="members-list" class="list-group"></ul>
             </div>
         </div>
     </div>
@@ -155,6 +130,7 @@
             const role = document.getElementById("member_role").value;
 
             if (name && email && role) {
+                
                 const membersList = document.getElementById("members-list");
 
                 const memberItem = document.createElement("li");
@@ -173,11 +149,18 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+{% endblock content %}
 
-</html>
+<label>Team Members</label>
+<div class="form-inline mt-2 mb-2">
+    <input type="text" id="member_name" name="member_name" class="input-control" placeholder="Name">
+    <input type="email" id="member_email" name="member_email" class="input-control" placeholder="Email">
+    <input type="text" id="member_role" name="member_role" class="input-control" placeholder="Role">
+    <button type="button" id="add-member-btn" class="btn btn-secondary add-member-btn">Add</button>
+</div>
 
 
-
+<div class="mt-4">
+    <h4 class="text-dark">Team Members:</h4>
+    <ul id="members-list" class="list-group"></ul>
+</div>
