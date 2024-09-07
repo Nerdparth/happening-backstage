@@ -96,9 +96,9 @@ body{
     <div class="form-container">
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <label for="username">Email</label>
+            <label for="username">Username</label>
             <div class="form-group mt-2 mb-2">
-                <input type="email" id="username"  name="email" class="input-control">
+                <input type="text" id="username"  name="username" class="input-control">
             </div>
             <label for="password">Password</label>
             <div class="form-group mt-2">

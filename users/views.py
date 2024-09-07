@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import User
@@ -22,7 +22,7 @@ def register_user(request):
         user.save()
         login(request, user)
         messages.success(request, 'Account created successfully')
-        return render(request, 'users/account_setup_htmx.html')
+        return HttpResponseRedirect('/users/setup-business-account')
     return render(request, 'users/register.html')
 
 
@@ -35,7 +35,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful')
-            return HttpResponseRedirect('/dashboard')
+            return redirect('/home/dashboard')
         else:
             messages.error(request, 'Invalid credentials')
             return HttpResponseRedirect('/users/login')

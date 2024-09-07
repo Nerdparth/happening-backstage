@@ -92,12 +92,9 @@
             <h2>Create an Account</h2>
         </div>
         <div class="form-container">
-            <form action="" method="POST">
+            <form action="{% url 'register' %}" method="POST">
                 {% csrf_token %}
-                <label for="username">Username</label>
-                <div class="form-group mt-2 mb-2">
-                    <input type="text" id="username" name="username" class="input-control">
-                </div>
+                
                 <label for="email">Email</label>
                 <div class="form-group mt-2 mb-2">
                     <input type="email" id="email" name="email" class="input-control">
@@ -105,10 +102,6 @@
                 <label for="password">Password</label>
                 <div class="form-group mt-2">
                     <input type="password" id="password" name="password" class="input-control">
-                </div>
-                <label for="confirm-password">Confirm Password</label>
-                <div class="form-group mt-2">
-                    <input type="password" id="confirm-password" name="confirm_password" class="input-control">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary signup-btn mt-3">SIGN UP</button>
