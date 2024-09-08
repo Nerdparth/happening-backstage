@@ -1,0 +1,66 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="row ">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10 " style="margin-left:250px;">
+        {% include 'home/top-bar.html' %}
+        <div class="container mt-5">
+            <h2>Create Event</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Event Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter event name">
+                </div>
+                <div class="form-group">
+                    <label for="details">Details</label>
+                    <textarea class="form-control" id="details" name="details" rows="3"
+                        placeholder="Enter event details"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event_cateogry">Event Category</label>
+                    <input type="text" class="form-control" id="event_cateogry" name="event_cateogry"
+                        placeholder="Enter event category">
+                </div>
+                <div class="form-group">
+                    <label for="event_date">Event Date</label>
+                    <input type="date" class="form-control" id="event_date" name="event_date">
+                </div>
+                <div class="form-group">
+                    <label for="event_time">Event Time</label>
+                    <input type="time" class="form-control" id="event_time" name="event_time">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter event location">
+                </div>
+                <div class="form-group">
+                    <label for="image">Event Image</label>
+                    <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published">
+                    <label class="form-check-label" for="is_published">Publish Event</label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked>
+                    <label class="form-check-label" for="is_active">Active Event</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Event</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% else %}
+<div class="container text-center py-4">
+    <h4>Please login to access the page</h4>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
+{% endif %}
+{% endblock content %}
+

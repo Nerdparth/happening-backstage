@@ -4,7 +4,7 @@ from users.models import BusinessAccount, TeamManager, TeamMember
 from .models import Task, TodoList, TodoItem
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-
+from createevent.models import EventDetails
 def taskmanager_home(request):
     account = BusinessAccount.objects.get(user=request.user)
     team = TeamManager.objects.get(user=account)
@@ -25,6 +25,7 @@ def taskmanager_home(request):
 def create_task(request):
     if request.method == 'POST':
         title = request.POST.get('title')
+        event = request.POST.get('event_id')
         description = request.POST.get('description')
         team_id = request.POST.get('team_id')
         priority = request.POST.get('priority')
@@ -32,7 +33,8 @@ def create_task(request):
         end_date = request.POST.get('end_date')
         status = request.POST.get('status')
         team = TeamManager.objects.get(team_id=team_id)
-        task = Task.objects.create(title=title, description=description, team=team, priority=priority, start_date=start_date, end_date=end_date, status=status)
+        event = EventDetails.objects.filter(id=event)[0] or None
+        task = Task.objects.create(title=title, description=description, team=team, priority=priority, start_date=start_date, end_date=end_date, status=status,event=event)
         return HttpResponseRedirect('/taskmanager/task/'+str(task.id))
 
 
@@ -81,6 +83,34 @@ def get_team_tasks(request):
     b_account = BusinessAccount.objects.get(user=user)
     team_manager = TeamManager.objects.get(user=b_account)
     tasks = Task.objects.filter(team=team_manager)
+    return_list = []
+    for task in tasks:
+        return_list.append({'title':task.title, 'description':task.description, 'status':task.status, 'completed':task.completed,"priority":task.priority,"end_date":task.end_date.strftime("%b %d ")  , 'id':task.id,'assigned_to':[{"email":person.email,"name":person.user} for person in task.assigned_to.all()]})
+    return JsonResponse(return_list, safe=False)
+
+def get_team_tasks_month(request):
+    user = request.user
+    month = request.GET.get('month')
+    month = int(month) #11
+    month +=1 #12 
+    b_account = BusinessAccount.objects.get(user=user)
+    team_manager = TeamManager.objects.get(user=b_account)
+    tasks = Task.objects.filter(team=team_manager,end_date__month=month)
+    return_data = {}    
+    for x in tasks:
+            if return_data.get(x.start_date.day):
+                return_data[x.start_date.day].append({'event_name':x.title,'event_id':x.id,'event_date':x.start_date.strftime("%d %B %Y"),"priority":x.priority})
+            else:
+                return_data[x.start_date.day]=[{'event_name':x.title,'event_id':x.id,'event_date':x.start_date.strftime("%d %B %Y"),"priority":x.priority}]
+    return JsonResponse(return_data)
+    
+
+def get_event_tasks(request,event_id):
+    user = request.user
+    event = EventDetails.objects.get(id=event_id)
+    b_account = BusinessAccount.objects.get(user=user)
+    team_manager = TeamManager.objects.get(user=b_account)
+    tasks = Task.objects.filter(event=event)
     return_list = []
     for task in tasks:
         return_list.append({'title':task.title, 'description':task.description, 'status':task.status, 'completed':task.completed,"priority":task.priority,"end_date":task.end_date.strftime("%b %d ")  , 'id':task.id,'assigned_to':[{"email":person.email,"name":person.user} for person in task.assigned_to.all()]})
@@ -147,3 +177,16 @@ def remove_task_from_teammate(request,task_id,person_id):
         task.assigned_to.remove(person)
         task.save()
         return render(request, 'taskmanager/assign_tasks.html', {'task':task})
+    
+
+def task_timeline(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    tasks = Task.objects.filter(team=team).order_by('end_date')
+    return render(request, 'taskmanager/task_timeline.html',context={'account':account,'team':team,"tasks":tasks})
+
+def task_board(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    tasks = Task.objects.filter(team=team).order_by('end_date')
+    return render(request, 'home/board.html',context={'account':account,'team':team,"tasks":tasks})

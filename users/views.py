@@ -107,7 +107,6 @@ def add_to_team_page(request):
             team = TeamManager.objects.get(user=b_account)
             return render(request, 'users/team-setup.html', {'team':team})
         except Exception as e:
-            print(e)
             messages.error(request, 'No team found')
             return HttpResponseRedirect('/users/team-setup')
     except:

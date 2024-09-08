@@ -1,0 +1,111 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="row ">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10 " style="margin-left:250px;">
+        {% include 'home/top-bar.html' %}
+            <section>
+                <div class="container"
+                    style="width: 900px; overflow:hidden; filter:blur(20px) brightness(80%) contrast(120%);-webkit-filter:blur(20px)  brightness(80%) contrast(120%); z-index:-1;position:relative;">
+                    <img src="{{event.image}}" style="width: 900px;height:400px;" alt="">
+                </div>
+                <div class="stats-container container " style="margin-top: -400px; height:500px; z-index:10; width:90%;">
+                    
+                        {% include 'components/progress.html' %}
+
+                </div>
+               
+                <!-- <div style="width: fit-content;">
+                    <h1 style="font-size: 34pt;" class="font-bold">Sales & Tickets</h1>
+                    <div class=" d-flex justify-content-between" style="flex-wrap: wrap;">
+                        {% for tier in event.get_tickets %}
+                        <div class="ticket-body bg-fafa border-dodo rounded-20 px-3 py-3 mx-2"
+                            style="width: 300px; height:190px;">
+                            <h4 style="color:#444444;"><b>{{tier.label}}</b></h4>
+                            <span class="font-12">Rs. {{tier.price}}</span>
+                            <br>
+                            <span class="text-success font-bold">Revenue Rs. {% widthratio tier.sold 1 tier.price %}</span> 
+                            <p style="max-height: 80px; min-height:10px;height:auto;" class="text-secondary">
+                                {{tier.description}}</p>
+        
+                            {% if not tier.is_limited %}
+                            <span class="text-dark font-bold">No Limit</span>
+                            {% else %}
+                            <div class="progress rounded-20">
+                                <div class="progress-bar progress-bar progress-bar-animated bg-primary text-dark rounded-20"
+                                    role="progressbar" style="width: {{tier.sold}}%;" aria-valuenow="{{tier.sold}}"
+                                    aria-valuemin="0" aria-valuemax="{{tier.quantity}}">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="font-08"><b>tickets sold {{tier.sold}}</b></span>
+                                <span class="font-08"><b>max {{tier.quantity}}</b></span>
+                            </div>
+                            {% endif %}
+                        </div>
+        
+                        {% endfor %}
+                    </div>
+                    <div class="ticket-body bg-fafa border-dodo rounded-20 px-3 py-3 mx-2 my-3"
+                        style="width: 300px; height:190px;">
+                        <h4 style="color:#444444;"><b>Total Earnings </b></h4>
+                        <span class="font-12">Expected {{event.expected_revenue}} </span>
+                        <br>
+                        {% if not event.is_free %}
+                        <span class="text-dark font-bold">Free Event</span>
+                        {% else %}
+                        <h3><b>{{event.get_current_revenue.0}}</b></h3>
+                        <div class="progress rounded-20">
+                            <div class="progress-bar progress-bar progress-bar-animated bg-primary text-dark rounded-20"
+                                role="progressbar" style="width: {{event.get_current_revenue.1}}%;"
+                                aria-valuenow="{{event.get_current_revenue.0}}" aria-valuemin="0"
+                                aria-valuemax="{{event.expected_revenue}}">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="font-08"><b>revenue {{event.get_current_revenue.0}} </b></span>
+                            <span class="font-08"><b>max {{event.expected_revenue}}</b></span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div> -->
+        
+            </section>
+        </div>
+        <section>
+            <div>
+        
+        
+                <!-- <div class="container p-3 text-center bg-white mt-3">
+                                    <h2>
+                                        <span class="material-symbols-outlined" style="font-size: 36pt;">
+                                            confirmation_number
+                                        </span>
+        
+                                    </h2>
+                                    <span>Passes Sold</span>
+                                    <div class="d-flex justify-content-center">
+        
+                                        <h2 class=" font-bold reg_count text-success">0</h2>
+                                        <h2 class="text-dark font-bold">/{{event.max_limit}}</h2>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar reg-pbar progress-bar-striped progress-bar-animated bg-success text-dark"
+                                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="{{event.max_limit}}">
+                                        </div>
+                                    </div>
+                                </div> -->        
+            </div>
+            </div>
+        {% else %}
+        <div class="container text-center py-4">
+            <h4>Please login to access the page</h4>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+        {% endif %}
+        {% endblock content %}

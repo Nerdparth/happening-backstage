@@ -59,16 +59,16 @@
     </div>
     <div class="container mt-4">
         <ul>
-            <li class="dashboard-tile border-bottom"><i class="fa-solid fa-table"></i> <span class="mx-3" style="width:150px;">Home</span> <i class="fa-solid fa-chevron-right"></i></li>
-            <li class="dashboard-tile border-bottom"><i class="fa-regular fa-calendar"></i> <span class="mx-3" style="width:150px;">Events</span> <i class="fa-solid fa-chevron-right"></i></li>
+            <a href="/dashboard"><li class="dashboard-tile border-bottom"><i class="fa-solid fa-table"></i> <span class="mx-3" style="width:150px;">Home</span> <i class="fa-solid fa-chevron-right"></i></li></a>
+           <a href="{% url 'list-team-events' %}"> <li class="dashboard-tile border-bottom"><i class="fa-regular fa-calendar"></i> <span class="mx-3" style="width:150px;">Events</span> <i class="fa-solid fa-chevron-right"></i></li></a>
             <a href="{% url 'task-manager' %}"><li class="dashboard-tile border-bottom"><i class="fa-solid fa-list-check"></i> <span class="mx-3"
                     style="width:150px;">Task Manager</span> <i class="fa-solid fa-chevron-right"></i></li></a>
-            <li class="dashboard-tile border-bottom"><i class="fa-solid fa-calendar-days"></i> <span class="mx-3"
-                    style="width:150px;">Calendar</span> <i class="fa-solid fa-chevron-right"></i></li>
-            <li class="dashboard-tile border-bottom"><i class="fa-solid fa-users-line"></i> <span class="mx-3"
-                    style="width:150px;">CRM</span> <i class="fa-solid fa-chevron-right"></i></li>
+            <a href="{% url 'calendar-view' %}"><li class="dashboard-tile border-bottom"><i class="fa-solid fa-calendar-days"></i> <span class="mx-3"
+                    style="width:150px;">Calendar</span> <i class="fa-solid fa-chevron-right"></i></li></a>
+            <li class="dashboard-tile border-bottom"><i class="fa-solid fa-dollar"></i> <span class="mx-3"
+                    style="width:150px;">Inventory</span> <i class="fa-solid fa-chevron-right"></i></li>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-bullhorn"></i><span class="mx-3"
-                    style="width:150px;">Promotions </span> <i class="fa-solid fa-chevron-right"></i></li>
+                    style="width:150px;">Promotions & CRM </span> <i class="fa-solid fa-chevron-right"></i></li>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-people-group"></i><span class="mx-3"
                     style="width:150px;">Teams</span> <i class="fa-solid fa-chevron-right"></i></li>
             <li class="dashboard-tile border-bottom"><i class="fa-solid fa-user-circle"></i><span class="mx-3"

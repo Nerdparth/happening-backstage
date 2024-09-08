@@ -1,7 +1,5 @@
 <style>
-    body {
-        background: grey;
-    }
+  
 
     .card {
         border-radius: 20px;
@@ -56,29 +54,38 @@
         color: white;
     }
 </style>
-</head>
 
-<body>
 
     <div class="container mt-5">
         <div class="card">
             <div class="row">
                 <div class="col-md-8">
-                    <h4>Abc event name</h4>
-                    <p>14 Sept 2024</p>
-                    <p>Holy City</p>
-                    <p>Offline event</p>
-
+                    <h4>{{event.name}}</h4>
+                    <p>{{event.event_date}} {{event.event_time}}</p>
+                    <p>{{event.location}}</p>
+                    {% if event.team %}
+                    
                     <div class="progress mb-3" style="height: 10px;">
-                        <div class="progress-bar" style="width: 10%;" role="progressbar"></div>
+                        <div class="progress-bar" style="width: {{progress}}%;" role="progressbar"></div>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span>0%</span>
-                        <span>100%</span>
+                        <span></span>
+                        <span>{{progress}}%</span>
                     </div>
-
                     <div class="mt-3">
-                        <div class="task-chip">Task Name 1</div>
+
+                        {% for task in tasks %}
+                            <div class="task-chip">
+                                {% if task.status == 'done' %}
+                                <span class="text-success">{{task.title}} </span>
+                                {% else %}
+                                <span class="text-dark">{{task.title}} </span>
+
+                                {% endif %}
+
+                                </div>
+                        {% endfor %}
+                        <!-- <div class="task-chip">Task Name 1</div>
                         <div class="task-chip">Task Name 2</div>
                         <div class="task-chip">Task Name 3</div>
                         <div class="task-chip">Task Name 4</div>
@@ -89,18 +96,84 @@
                         <div class="task-chip">Task Name 9 </div>
                         <div class="task-chip">Task Name 10</div>
                         <div class="task-chip">Task Name 11</div>
-                        <div class="task-chip">Task Name 12</div>
+                        <div class="task-chip">Task Name 12</div> -->
                     </div>
+                    {% else %}
+                       <a href="{% url 'assign-team' event.id %}"> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignTeam" style="border-radius: 20px;">Connect to a Team</button></a>
+                        <!-- <div class="modal fade" id="assignTeam" tabindex="-1" aria-labelledby="assignTeam" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Create a new Todo List</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="team" value="{{team.team_id}}">
+                                            <input type="hidden" name="task" value="{{task.id}}">
+                        
+                                            <div class="form-group">
+                                                <label for="title">Teams on this account</label>
+                                                <select name="team" id="team" class="form-select">
+                                                        <option value="{{team.team_id}}">{{team.team_name}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-primary" hx-post="{% url 'create_todo_list' %}" hx-trigger="click"
+                                                    hx-target="#todo-list-parent" hx-swap="innerHTML" data-bs-dismiss="modal">
+                                                    Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                        
+                                </div>
+                            </div>
+                        </div> -->
+                    {% endif %}
+
+
                 </div>
 
                 <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
                     <div class="days-label mb-2">Days to event</div>
                     <div class="days-counter">
-                        <div>0</div>
-                        <div>1</div>
-                        <div>2</div>
+                        <div id="digit1">0</div>
+                        <div id="digit2">1</div>
+                        <div id="digit3">2</div>
                     </div>
                 </div>
             </div>
         </div>
+        <br><br>
+        {% include 'home/taskboard_events.html' %}
     </div>
+
+    <script>
+       function updateCountdown() {
+            // Get the event date from the template and convert it to a JavaScript Date object
+            const eventDate = new Date("{{ event.event_date|date:'Y-m-d' }}");
+            console.log(eventDate);
+
+            // Get the current date
+            const today = new Date();
+
+            // Calculate the difference in time between the event date and today
+            const timeDifference = eventDate - today;
+
+            // Calculate the number of days left
+            const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+            // Convert the number of days left into individual digits
+            const digits = String(daysLeft).padStart(3, '0').split('');
+
+            // Update the digit boxes
+            document.getElementById('digit1').textContent = digits[0];
+            document.getElementById('digit2').textContent = digits[1];
+            document.getElementById('digit3').textContent = digits[2];
+        }
+
+        // Call the function to update the countdown
+        updateCountdown();
+
+    </script>

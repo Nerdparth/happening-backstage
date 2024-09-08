@@ -10,6 +10,12 @@ urlpatterns = [
     path('task/<int:task_id>/delete/', views.delete_task, name='delete_task'),
     path('task/<int:task_id>/change_status/', views.change_task_status, name='change_task_status'),
     path('tasks/', views.get_team_tasks, name='get_team_tasks'),
+    path('tasks-month/', views.get_team_tasks_month, name='get_team_tasks_month'),
+
+    path('tasks/<int:event_id>', views.get_event_tasks, name='get_event_tasks'),
+    path('tasks/timeline', views.task_timeline, name='task_timeline'),
+    path('tasks/task-board', views.task_board, name='task_board'),
+
     path("todo-list/create/", views.create_todo_list, name="create_todo_list"),
     path("todo-list/add-item/", views.create_todo_item, name="add_todo_item"),
     path("todo-list/complete-item/<int:item_id>", views.complete_todo_item, name="complete_todo_item"),

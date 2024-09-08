@@ -19,6 +19,7 @@ class Task(models.Model):
     team = models.ForeignKey("users.TeamManager", on_delete=models.CASCADE)
     status = models.CharField(max_length=100,choices=choices,default="todo")
     assigned_to = models.ManyToManyField("users.TeamMember", related_name="assigned_tasks")
+    event = models.ForeignKey("createevent.EventDetails", on_delete=models.CASCADE, null=True)
     def __str__(self):
         return self.title
     

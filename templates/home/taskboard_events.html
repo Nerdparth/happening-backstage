@@ -1,0 +1,380 @@
+<style>
+    .add-button {
+        background-color: #fafafa;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #1c1c1e;
+    }
+
+    .add-button:hover {
+        background-color: #eeeeee;
+    }
+
+    .task {
+        background-color: #fafafa;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        padding: 5px;
+        cursor: pointer;
+        color: #1c1c1e;
+        margin-top: 10px;
+    }
+
+    .task-description {
+        font-size: 12px;
+        color: #6c6c6c;
+        overflow: hidden;
+        white-space: nowrap;
+        /* Don't forget this one */
+        text-overflow: ellipsis;
+    }
+
+    .priority {
+        height: 20px;
+        width: 60px;
+        border-radius: 12px;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        background-color: #f2f2f7;
+    }
+
+    .priority-medium {
+        color: #533d00;
+        font-weight: bold;
+
+        background-color: #E7AA00;
+    }
+
+    .task-due {
+        font-size: 12px;
+        color: #6c6c6c;
+    }
+
+    .priority-low {
+        color: #020065;
+        font-weight: bold;
+
+        background-color: #9dbeff;
+    }
+
+    .priority-high {
+        color: #040404;
+        font-weight: bold;
+        background-color: #ff9b9b;
+    }
+
+    .persons {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        /* Don't forget this one */
+        text-overflow: ellipsis;
+    }
+
+    .person {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f2f2f7;
+        color: #1c1c1e;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+</style>
+
+<div class="container p-0 pb-2 mx-3" style="background-color: #f2f2f7; height:800px; overflow-y:scroll;">
+
+    <div class="m-3">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="bg-white p-2 rounded">TODO</h5>
+                <div class="add-button" data-bs-toggle="modal" data-bs-target="#exampleModalTodo">Add <i
+                        class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+                <div class="modal fade" id="exampleModalTodo" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Task</h1>
+                                <button type="button" class="btn-close mt-2" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'create_task' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="team_id" value="{{team.team_id}}">
+                                    <input type="hidden" name="event_id" value="{{event.id}}">
+
+                                    <input type="hidden" name="status" value="todo">
+
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" id="title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Start Date</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">End Date</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Priority</label>
+                                        <select name="priority" id="" class="form-select">
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary mt-2" data-bs-dismiss="modal">
+                                            Create</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks d-flex flex-column " id="todo">
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5 class="bg-white p-2 rounded">INPROGRESS</h5>
+                <div class="add-button" data-bs-toggle="modal" data-bs-target="#exampleModalProgress">Add <i
+                        class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+                <div class="modal fade" id="exampleModalProgress" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Task</h1>
+                                <button type="button" class="btn-close mt-2" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'create_task' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="team_id" value="{{team.team_id}}">
+                                    <input type="hidden" name="event_id" value="{{event.id}}">
+
+                                    <input type="hidden" name="status" value="progress">
+
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" id="title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Start Date</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">End Date</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Priority</label>
+                                        <select name="priority" id="" class="form-select">
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary mt-2" data-bs-dismiss="modal">
+                                            Create</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks d-flex flex-column " id="progress">
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5 class="bg-white p-2 rounded">NEED REVIEW</h5>
+                <div class="add-button" data-bs-toggle="modal" data-bs-target="#exampleModalReview">Add <i
+                        class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+                <div class="modal fade" id="exampleModalReview" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Task</h1>
+                                <button type="button" class="btn-close mt-2" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'create_task' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="team_id" value="{{team.team_id}}">
+                                    <input type="hidden" name="event_id" value="{{event.id}}">
+
+                                    <input type="hidden" name="status" value="review">
+
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" id="title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Start Date</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">End Date</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Priority</label>
+                                        <select name="priority" id="" class="form-select">
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary mt-2" data-bs-dismiss="modal">
+                                            Create</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks d-flex flex-column " id="review">
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5 class="bg-white p-2 rounded">COMPLETED</h5>
+                <div class="add-button" data-bs-toggle="modal" data-bs-target="#exampleModalDone">Add <i
+                        class="fa fa-plus-circle mx-2" aria-hidden="true"></i></div>
+
+                <div class="modal fade" id="exampleModalDone" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Task</h1>
+                                <button type="button" class="btn-close mt-2" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'create_task' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="team_id" value="{{team.team_id}}">
+                                    <input type="hidden" name="event_id" value="{{event.id}}">
+                                    <input type="hidden" name="status" value="done">
+
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" id="title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Start Date</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">End Date</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Priority</label>
+                                        <select name="priority" id="" class="form-select">
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary mt-2" data-bs-dismiss="modal">
+                                            Create</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks d-flex flex-column " id="done">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $.get('/taskmanager/tasks/{{event.id}}', function (data) {
+            console.log(data);
+            for (var i = 0; i < data.length; i++) {
+                var task = data[i];
+                let people = task.assigned_to.map(function (person) {
+                    return `<div class="person">${person.name[0]}</div>`;
+                }).join("");
+                var taskDiv = `
+                    <div class="task py-2">
+                        <div class="priority priority-${task.priority}">${task.priority}</div>
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-description">${task.description}</div>
+                        <div class="task-due">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            ${task.end_date}</div>
+                            <div class="persons">
+                                ${people}
+                            </div>
+
+                        <a href="/taskmanager/task/${task.id}"><div><span class="text-primary">View task</span></div></a>
+                    </div>
+                `;
+
+                $('#' + task.status).append(taskDiv);
+            }
+        });
+    });
+
+</script>

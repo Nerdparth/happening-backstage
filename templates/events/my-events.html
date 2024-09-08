@@ -1,0 +1,82 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="row ">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10 " style="margin-left:250px;">
+        {% include 'home/top-bar.html' %}
+    <div class="container mt-5">
+        <h2>Upcoming Events (Within 10 Days)</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in upcoming_events %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.details|truncatewords:10 }}</td>
+                    <td>{{ event.event_cateogry }}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>{{ event.event_time }}</td>
+                    <td>{{ event.location }}</td>
+                    <td><a href="{% url 'view-event' event.id %}" class="btn btn-primary btn-sm">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <h2>All Team Events</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.details|truncatewords:10 }}</td>
+                    <td>{{ event.event_cateogry }}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>{{ event.team.team_name }}</td>
+                    <td>{{ event.location }}</td>
+                    <td><a href="{% url 'view-event' event.id %}" class="btn btn-primary btn-sm">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'events/event-calendar.html' %}
+    </div>
+
+{% else %}
+<div class="container text-center py-4">
+    <h4>Please login to access the page</h4>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
+{% endif %}
+{% endblock content %}

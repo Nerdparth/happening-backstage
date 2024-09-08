@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'createevent',
-    'home'
+    'home',
+    'taskmanager',
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from users.models import BusinessAccount, TeamManager, TeamMember
 from taskmanager.models import Task
 from django.utils import timezone
+from createevent.models import EventDetails
 # Create your views here.
 def dashboard(request):
     account = BusinessAccount.objects.get(user=request.user)
@@ -15,3 +16,9 @@ def dashboard(request):
     overdue_tasks = Task.objects.filter(team=team, end_date__lt=timezone.now()).exclude(status="done").count()
 
     return render(request, 'home/dashboard.html',context={'account':account,'team':team,"tasks":tasks,"priority_tasks":priority_tasks,"priority_tasks_complete":priority_tasks_complete,"pending_tasks":pending_tasks,"overdue_tasks":overdue_tasks})
+
+def calendar_view(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    events = EventDetails.objects.filter(created_by=account)
+    return render(request, 'home/calendar-view.html', {'events': events, "account":account})
