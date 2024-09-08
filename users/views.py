@@ -73,19 +73,7 @@ def logout_user(request):
 def dashboard(request):
     return render(request, 'home/dashboard.html')
 
-def post_to_external_api(email,template,subject,url,name,company_name,msg):
-    url = "https://email-service-d2hhazbgaeh8apga.eastus-01.azurewebsites.net/process-data/"
-    payload = {
-        "email": email,
-        "template": template,
-        "subject": subject,
-        "url":url,
-        "name":name,
-        "company_name":company_name,
-        "msg": msg
-    }
-    response = requests.post(url, json=payload)
-    return response.status_code
+
     
 def team_manager(request):
     #creates a team in db
@@ -96,6 +84,8 @@ def team_manager(request):
         team_manager = TeamManager.objects.get_or_create(user=b_account, team_name=team_name)
 
         messages.success(request, 'Team created successfully')
+        if post_to_external_api(email=request.user.email,template="welcome",subject="Welcome to happening backstage",url="https://example.com",name=b_account.user.username,company_name=b_account.business_name,msg="") == 200:
+             messages.success(request, 'Email Sent')  
         return HttpResponseRedirect('/users/add-members-page')
     return render(request, 'users/team_manager.html')
 
@@ -122,13 +112,32 @@ def add_to_team(request):
     if request.method == "POST":
         team_id = request.POST.get('team_id')
         team = TeamManager.objects.get(team_id=team_id)
+        account = team.user.business_name
         name = request.POST.get('name')
         role = request.POST.get('role')
         email = request.POST.get('email')
         team_member = TeamMember.objects.create(user=name,email=email, team=team, team_role=role)
         team_member.save()
-        # if post_to_external_api(email=user.email,template="welcome",subject="Account setup successful",url="https://example.com",name=request.user.username,company_name=business_name,msg="Your account has been successfully setup") == 200:
-        #     messages.success(request, 'Email Sent')  
+        otp = get_random_string(6, allowed_chars='1234567890')
+        if post_to_external_api(email=email,template="team_joining",subject="You have been added to a team",url="https://example.com",name=name,company_name=account,msg=otp) == 200:
+             messages.success(request, 'Email Sent')  
         messages.success(request, 'Added to team successfully')
         return JsonResponse({'status':200, 'message':'Added to team successfully'})
     return render(request, 'users/add_to_team_page.html')
+
+
+def post_to_external_api(email,template,subject,url,name,company_name,msg):
+    url = "https://d335-112-196-112-74.ngrok-free.app/api/process-data/"
+    payload = {
+        "email": email,
+        "template": template,
+        "subject": subject,
+        "url":url,
+        "name":name,
+        "company_name":company_name,
+        "msg": msg
+    }
+
+    response = requests.post(url, json=payload)
+    print(response)
+    return response.status_code

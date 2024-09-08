@@ -1,6 +1,4 @@
 <style>
- 
-
     .events-container {
         background-color: white;
         border-radius: 10px;
@@ -80,18 +78,16 @@
     }
 </style>
 
+{% if whiteboards or meetings %}
 <div class="events-container">
-    <h2>Upcoming events</h2>
-    {% for event in events %}
-    <div class="event">
-        <div class="date">{{event.event_date | date:'b d'}}</div>
-        <div class="line"></div>
-        <div class="details">
-            <p class="title">{{event.name}}</p>
-            <p class="location">offline | {{event.location}}</p>
-        </div>
-        <button class="view-btn">View</button>
-    </div>
+    <h2>Tools</h2>
+    {% for board in whiteboards %}
+        <div class="bg-light p-2 rounded my-1"> <a class="text-primary" href="https://miro.com/app/board/{{board.board_id}}">View Whiteboard</a> </div>
     {% endfor %}
-    
+    {% for meet in meetings %}
+    <div class="bg-light p-2 rounded my-1"> <a class="text-primary" href="https://meet.jit.si/{{meet.meet_id}}#config.prejoinPageEnabled=false&userInfo.displayName=Moderator">View
+            Meet</a> </div>
+    {% endfor %}
+
 </div>
+{% endif %}

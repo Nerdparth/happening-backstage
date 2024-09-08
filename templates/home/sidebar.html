@@ -82,7 +82,7 @@
                     style="width:150px;">Start Meeting</span>
                 <div></div>
             </li>
-            <li class="dashboard-tile"><i class="fa-solid fa-chalkboard-user"></i><span class="mx-3"
+            <li class="dashboard-tile" id="createBoard"><i class="fa-solid fa-chalkboard-user"></i><span class="mx-3"
                     style="width:150px;">Whiteboard</span>
                 <div></div>
             </li>
@@ -90,3 +90,65 @@
         </ul>
     </div>
 </div>
+
+<script>
+    const accessToken = 'eyJtaXJvLm9yaWdpbiI6ImV1MDEifQ_HUlaQz5ZjavALiPS_IZ7yxFfIrU'; // Replace this with your valid access token
+
+    document.getElementById('createBoard').addEventListener('click', () => {
+        fetch('https://api.miro.com/v1/boards', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'Frontend Board',
+                description: 'This board is created via the Miro API using JavaScript',
+                sharingPolicy: {
+                    access: 'edit'  // Make the board public with edit access
+                }
+            })
+        })
+            .then(response => {
+                console.log('Response Status:', response.status); // Log the HTTP status code
+                console.log('Response Headers:', response.headers); // Log response headers
+                if (!response.ok) {
+                    return response.json().then(error => {
+                        console.error('Error details:', error);
+                        throw new Error('Request failed: ' + response.status);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.id) {
+                    alert(`Board created with ID: <strong>${data.id}</strong>`);
+                    const boardUrl = `https://miro.com/app/board/${data.id}/`;
+                    const newWindow = window.open(boardUrl, '_blank');
+                    $.ajax({
+                        url: "{% url 'create-whiteboard' %}",
+                        type: 'POST',
+                        data: {
+
+                            board_id: data.id,
+                        },
+                        success: function (response) {
+                            console.log('Board saved to the database:', response);
+                        },
+                        error: function (error) {
+                            console.error('Error saving board to the database:', error);
+                        }
+                    });
+                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                        alert('Please allow popups for this website to view the Miro board.');
+                    }
+                } else {
+                    console.error('Board ID is missing from response:', data);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+
+</script>

@@ -5,6 +5,9 @@ from .models import Task, TodoList, TodoItem
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from createevent.models import EventDetails
+import requests
+
+
 def taskmanager_home(request):
     account = BusinessAccount.objects.get(user=request.user)
     team = TeamManager.objects.get(user=account)
@@ -33,7 +36,11 @@ def create_task(request):
         end_date = request.POST.get('end_date')
         status = request.POST.get('status')
         team = TeamManager.objects.get(team_id=team_id)
-        event = EventDetails.objects.filter(id=event)[0] or None
+        event = EventDetails.objects.filter(id=event)
+        if event:
+            event = event[0]
+        else:
+            event = None
         task = Task.objects.create(title=title, description=description, team=team, priority=priority, start_date=start_date, end_date=end_date, status=status,event=event)
         return HttpResponseRedirect('/taskmanager/task/'+str(task.id))
 
@@ -166,6 +173,7 @@ def assign_task_to_teammate(request):
         task = Task.objects.get(id=task_id)
         person = TeamMember.objects.get(id=request.POST.get('person_id'))
         task.assigned_to.add(person)
+        post_to_external_api(email=person.email,template="mention",subject="Someone Mentioned You",url=f"/taskmanager/tasks/{task_id}",name=person.user,company_name=person.team.user.business_name,msg="")  
         task.save()
         return render(request, 'taskmanager/assign_tasks.html', {'task':task})
     
@@ -190,3 +198,19 @@ def task_board(request):
     team = TeamManager.objects.get(user=account)
     tasks = Task.objects.filter(team=team).order_by('end_date')
     return render(request, 'home/board.html',context={'account':account,'team':team,"tasks":tasks})
+
+
+def post_to_external_api(email,template,subject,url,name,company_name,msg):
+    url = "https://d335-112-196-112-74.ngrok-free.app/api/process-data/"
+    payload = {
+        "email": email,
+        "template": template,
+        "subject": subject,
+        "url":url,
+        "name":name,
+        "company_name":company_name,
+        "msg": msg
+    }
+    response = requests.post(url, json=payload)
+    print(response)
+    return response.status_code

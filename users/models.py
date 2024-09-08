@@ -23,6 +23,7 @@ class TeamManager(models.Model):
     user = models.ForeignKey("BusinessAccount", on_delete=models.CASCADE)
     team_name = models.CharField(max_length=100)
     team_id = models.UUIDField(default=uuid4, editable=False, unique=True)
+
     # team_members = models.ManyToManyField(User, related_name='team_members')
 
     def __str__(self):

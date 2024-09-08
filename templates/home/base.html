@@ -106,6 +106,17 @@
         const moderatorURL = `https://meet.jit.si/${roomName}#config.prejoinPageEnabled=false&userInfo.displayName=Moderator`;
 
             // Open the meeting in a new tab
+            $.ajax({
+                url: "{% url 'create-meeting' %}",
+                type: 'POST',
+                data: {
+                    meet_id: roomName,
+                },
+                success: function (response) {
+                    console.log('Meeting saved to the database:', response);
+                }
+            });
+
             window.open(moderatorURL, '_blank');
     }
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
