@@ -2,6 +2,7 @@ asgiref==3.8.1
 certifi==2024.8.30
 charset-normalizer==3.3.2
 Django==4.2.16
+django-cors-headers==4.4.0
 gunicorn==23.0.0
 idna==3.8
 packaging==24.1
