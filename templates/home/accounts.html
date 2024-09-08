@@ -1,0 +1,104 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<style>
+        
+        .content-area {
+            margin-left: 250px;
+            padding: 40px;
+        }
+        .account-details {
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+        }
+        .btn-danger, .btn-primary {
+            margin-top: 20px;
+            padding: 10px 30px;
+            border-radius: 8px;
+        }
+        .form-control-disabled {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+        }
+        .form-control-disabled[contenteditable="true"] {
+            cursor: text;
+        }
+        .form-control-disabled[contenteditable="false"] {
+            cursor: not-allowed;
+        }
+
+</style>
+{% if request.user.is_authenticated %}
+<div class="row ">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10 " style="margin-left:250px;">
+        {% include 'home/top-bar.html' %}
+        <!-- Main Content Section -->
+        <div class="content-area">
+            <!-- Profile Image Section -->
+        
+            <!-- Account Details Section -->
+            <div class="account-details mt-4">
+                <h2>Account Details</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div id="username" class="form-control-disabled">{{request.user.username}}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="currentTeam" class="form-label">Current Team</label>
+                        <div id="currentTeam" class="form-control-disabled">{{team}}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="businessDetails" class="form-label">Business Details</label>
+                        <div id="businessDetails" class="form-control-disabled" style="height: auto;">{{account.business_name}}</div>
+                    </div>
+        
+                    <!-- Buttons for actions -->
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary mx-2">Logout</button>
+                        <button type="button" class="btn btn-danger mx-2">Remove account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+        {% else %}
+        <div class="container text-center py-4">
+            <h4>Please login to access the page</h4>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+
+
+
+
+
+
+
+        {% endif %}
+       
+        {% endblock content %}

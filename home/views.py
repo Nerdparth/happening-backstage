@@ -7,6 +7,10 @@ from .models import Meetings, Whiteboard
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
+
+def index(request):
+    return render(request, 'home/index.html')
+
 def dashboard(request):
     account = BusinessAccount.objects.get(user=request.user)
     team = TeamManager.objects.get(user=account)
@@ -51,3 +55,14 @@ def create_whiteboard(request):
         return JsonResponse({"success":True})
     return JsonResponse({"success":False})
     
+
+def teams_page(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    return render(request, 'home/teams.html', {'teams': team, "account":account})
+    
+
+def accounts_page(request):
+    account = BusinessAccount.objects.get(user=request.user)
+    team = TeamManager.objects.get(user=account)
+    return render(request, 'home/accounts.html', {'team': team, "account":account})

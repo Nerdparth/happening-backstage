@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backstage</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E8E8E8;
+            color: #333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #001233;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        nav .auth-buttons {
+            display: flex;
+        }
+
+        nav .auth-buttons button {
+            margin-left: 15px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        nav .auth-buttons .login {
+            background-color: transparent;
+            color: #333;
+        }
+
+        nav .auth-buttons .signup {
+            background-color: black;
+            color: white;
+        }
+
+        /* Main Section */
+        .main {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .main img {
+            width: 650px;
+            padding-top: 10px;
+        }
+
+        .main h2 {
+            margin-top: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .main button {
+            background-color: black;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .main button:hover {
+            background-color: #001233;
+            outline: 2px solid #00f;
+        }
+
+        /* Team Section */
+        .team-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .team-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #001233;
+        }
+
+        .team {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .team .member {
+            margin: 10px 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">Backstage</div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="/users/login/"><button class="login">Login</button></a>
+            <a href="/users/register/"><button class="signup">Sign Up</button></a>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="main">
+        <img src="/media/mbp.png" alt="Laptop Image">
+        <h2>A lot goes behind the event.</h2>
+        <button>Signup</button>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-section">
+        <h3>Team</h3>
+        <div class="team" style="font: bold;">
+            <div class="member">Sahibdeep Singh</div>
+            <div class="member">Rakshit Mehra</div>
+            <div class="member">Sumeen Kaur</div>
+            <div class="member">Parth Kapoor</div>
+            <div class="member">Kirandeep Kaur</div>
+        </div>
+        <br><br>
+    </div>
+
+</body>
+
+</html>

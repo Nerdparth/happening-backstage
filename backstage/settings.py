@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'createevent',
     'home',
     'taskmanager',
+    'inventory',
 ]
 
 MIDDLEWARE = [

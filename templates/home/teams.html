@@ -1,0 +1,228 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<style>
+    .header {
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .info-box {
+        background-color: #fafafa;
+        padding: 20px;
+        max-width: 400px;
+        border-radius: 10px;
+        text-align: center;
+        flex: 1;
+        margin: 0 10px;
+        border: 1px solid #ddd;
+    }
+
+    .info-box p {
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .info-box span {
+        color: blue;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .button-container {
+        text-align: center;
+    }
+
+    .add-item-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-item-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .table-container {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    table th,
+    table td {
+        padding: 15px;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #f9f9f9;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    @media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .info-box {
+            margin: 10px 0;
+        }
+
+        .table-container {
+            overflow-x: scroll;
+        }
+    }
+    .status-dot {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .green-dot {
+        background-color: #28a745;
+    }
+    .red-dot {
+        background-color: #dc3545;
+    }
+    .team-member {
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .add-member-form {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        border-left: 1px solid #dee2e6;
+    
+    }
+        </style>
+{% if request.user.is_authenticated %}
+<div class="row ">
+    <div class="col-md-2">
+        {% include 'home/sidebar.html' %}
+    </div>
+    <div class="col-md-10 " style="margin-left:250px;">
+        {% include 'home/top-bar.html' %}
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="bg-white p-3 rounded" >
+                            <h4 class="mb-3">Team Members</h4>
+                            <!-- Dynamic rendering of team members -->
+                             <div id="members-list">
+                                {% for member in teams.members %}
+                                <div class="team-member">
+                                    <span class="status-dot green-dot"></span> {{member}} {{member.team_role}}
+                                </div>
+                                {% endfor %}
+                             </div>
+                             
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="add-member-form">
+                            <h4 class="mb-4">Add a New Member :</h4>
+                            <form action="" method="POST">
+                                <input type="hidden" class="team_id" value="{{teams.team_id}}">
+                                <div class="mb-3">
+                                    <label for="nameInput" class="form-label">Name</label>
+                                    <input type="text" id="member_name" class="form-control" id="nameInput" placeholder="Enter name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailInput" class="form-label">Email</label>
+                                    <input type="email" id="member_email" class="form-control" id="emailInput" placeholder="Enter email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="roleInput" class="form-label">Role</label>
+                                    <input type="text" id="member_role" class="form-control" id="roleInput" placeholder="Enter role">
+                                </div>
+                                <button type="button" class="btn btn-primary" id="add-member-btn">Add to Team</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        
+
+        {% else %}
+        <div class="container text-center py-4">
+            <h4>Please login to access the page</h4>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+
+
+
+
+
+
+
+        {% endif %}
+        <script>
+            // JavaScript to dynamically add team members
+            document.getElementById("add-member-btn").addEventListener("click", function () {
+                const name = document.getElementById("member_name").value;
+                const email = document.getElementById("member_email").value;
+                const role = document.getElementById("member_role").value;
+
+                if (name && email && role) {
+
+                    $.ajax({
+                        url: "{% url 'add-to-team' %}",
+                        type: "POST",
+                        data: {
+                            'name': name,
+                            'email': email,
+                            'role': role,
+                            'team_id': $('.team_id').val(),
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
+
+                    const membersList = document.getElementById("members-list");
+
+                    const memberItem = document.createElement("li");
+                    memberItem.className = "list-group-item";
+                    memberItem.textContent = `${name} (${role}) - ${email}`;
+
+                    membersList.appendChild(memberItem);
+
+                    // Clear the form fields
+                    document.getElementById("member_name").value = '';
+                    document.getElementById("member_email").value = '';
+                    document.getElementById("member_role").value = '';
+                } else {
+                    alert("Please fill in all fields before adding a member.");
+                }
+            });
+        </script>
+        {% endblock content %}

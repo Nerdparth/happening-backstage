@@ -25,7 +25,9 @@ urlpatterns = [
     path ('users/', include('users.urls')),
     path ('events/', include('createevent.urls')),
     path ('', include('home.urls')),
-    path ('taskmanager/', include('taskmanager.urls'))
+    path ('taskmanager/', include('taskmanager.urls')),
+    path ('inventory/', include('inventory.urls'))
+
 
 ]
 
