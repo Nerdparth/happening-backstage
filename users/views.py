@@ -29,13 +29,19 @@ def register_user(request):
 def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
-        username = User.objects.get(email=email).username
-        user = authenticate(request, username=username, password=password)
+        try:
+            user = User.objects.get(email=email)
+        except:
+            messages.error(request, 'User not found')
+            return HttpResponseRedirect('/users/login')
+        user = User.objects.get(email=email)
+        user = authenticate(request, username=user.username, password=password)
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful')
-            return redirect('/home/dashboard')
+            return redirect('/dashboard')
         else:
             messages.error(request, 'Invalid credentials')
             return HttpResponseRedirect('/users/login')
